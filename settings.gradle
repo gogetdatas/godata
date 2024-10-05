@@ -1,1 +1,6 @@
 rootProject.name = 'godata'
+include 'server'
+include 'gateway'
+include 'datatransmission'
+include 'verification'
+

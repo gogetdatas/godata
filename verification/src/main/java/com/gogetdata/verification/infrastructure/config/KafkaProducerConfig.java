@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.Map;
@@ -15,12 +16,12 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
     @Bean
-    public ProducerFactory<Long, TransmissionData> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfigs(), new LongSerializer(), new JsonSerializer<>());
+    public ProducerFactory<String, TransmissionData> producerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigs(), null, new JsonSerializer<>());
     }
 
     @Bean
-    public KafkaTemplate<Long, TransmissionData> kafkaTemplate() {
+    public KafkaTemplate<String, TransmissionData> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
@@ -30,6 +31,9 @@ public class KafkaProducerConfig {
                 .put("bootstrap.servers", "localhost:9092")
                 .put("key.serializer", LongSerializer.class)
                 .put("value.serializer", JsonSerializer.class)
+                .put(JsonDeserializer.TYPE_MAPPINGS, "TransmissionData:com.gogetdata.verification.application.dto.TransmissionData")
+
+                .put("group.id", "data")
                 .build();
     }
 }

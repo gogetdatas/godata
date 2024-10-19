@@ -1,4 +1,4 @@
-package com.gogetdata.verification.application.dto;
+package com.gogetdata.datatransmission.application.dto;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.constraints.NotNull;
@@ -15,11 +15,12 @@ public class TransmissionData {
 
     @NotNull
     private String subtype;
-
     @NotNull
     private Map<String, Object> data;
 
     @NotNull
     private String token;
+
+    private String keyHash;
     private Long companyId;
 }

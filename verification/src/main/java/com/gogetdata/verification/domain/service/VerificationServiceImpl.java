@@ -12,11 +12,12 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class VerificationServiceImpl implements VerificationService {
     private final CompanyRepository companyRepository;
-    private final KafkaTemplate<Long, TransmissionData> kafkaTemplate;
+    private final KafkaTemplate<String, TransmissionData> kafkaTemplate;
     @Override
     public void verify(TransmissionData transmissionData) {
         Company company =validateCompanyNotDeleted(findCompany(transmissionData.getToken()));
-        kafkaTemplate.send("data-transmission",company.getCompanyId(),transmissionData);
+        transmissionData.setCompanyId(company.getCompanyId());
+        kafkaTemplate.send("data-transmission",transmissionData);
     }
     private Company findCompany(String key) {
         return companyRepository.findByCompanyKey(key)
